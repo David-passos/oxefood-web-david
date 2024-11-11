@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon, TextArea } from 'semantic-ui-react';
 
 
 export default function FormProduto () {
+
+    
+   const [titulo, setTitulo] = useState();
+   const [codigo, setCodigo] = useState();
+   const [descricao, setDescricao] = useState();
+   const [valorUnitario, setValorUnitario] = useState();
+   const [tempoEntregaMinimo, setTempoEntregaMinimo] = useState();
+   const [tempoEntregaMaximo, setTempoEntregaMaximo] = useState();
+
 
     return (
 
@@ -26,9 +35,11 @@ export default function FormProduto () {
                                 <Form.Input
                                     required
                                     fluid
-                                    label='Titulo'
+                                    label='titulo'
                                     placeholder = 'Informe o titulo do produto'
                                     maxLength="100"
+                                    value={titulo}
+			                        onChange={e => setTitulo(e.target.value)}
                                 />
 
                                 <Form.Input
@@ -36,6 +47,7 @@ export default function FormProduto () {
                                     fluid
                                     label='Código do Produto'
                                     placeholder = 'informe o código do produto'
+                                    
                                     >
                                  
                                 </Form.Input>

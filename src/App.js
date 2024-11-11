@@ -1,12 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import { Segment } from 'semantic-ui-react';
-import FormEntregador from './views/entregador/FormEntregador';
+import FormProduto from './views/produto/FormProduto';
 
 function App() {
   return (
     <div className="App">
-     <FormEntregador />
+     <FormProduto />
 
 <div style={{marginTop: '6%'}}>
   <Segment vertical color='grey' size='tiny' textAlign='center'>
