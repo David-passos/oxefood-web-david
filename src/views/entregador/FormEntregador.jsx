@@ -22,7 +22,7 @@ export default function FormEntregador() {
     const [enderecoCidade, setEnderecoCidade] = useState();
     const [enderecoCep, setEnderecoCep] = useState();
     const [enderecoUf, setEnderecoUf] = useState();
-    const [ativo, setAtivo] = useState();
+    const [ativo, setAtivo] = useState(true);
 
     const estados = [{ key: '1', text: 'Pernambuco', value: 'PE' }];
 
