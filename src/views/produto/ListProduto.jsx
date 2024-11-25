@@ -60,7 +60,7 @@ export default function ListProduto() {
                                     <Table.HeaderCell>Valor Unitario</Table.HeaderCell>
                                     <Table.HeaderCell>Tempo de entrega maximo em minutos</Table.HeaderCell>
                                     <Table.HeaderCell>Tempo de entrega minimo em minutos</Table.HeaderCell>
-                               
+
                                     <Table.HeaderCell textAlign='center'>Ações</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
@@ -76,7 +76,7 @@ export default function ListProduto() {
                                         <Table.Cell>{produto.valorUnitario}</Table.Cell>
                                         <Table.Cell>{produto.tempoEntregaMaximo}</Table.Cell>
                                         <Table.Cell>{produto.tempoEntregaMinimo}</Table.Cell>
-                                        
+
                                         <Table.Cell textAlign='center'>
 
                                             <Button
@@ -85,7 +85,7 @@ export default function ListProduto() {
                                                 color='green'
                                                 title='Clique aqui para editar os dados deste produto'
                                                 icon>
-                                                <Icon name='edit' />
+                                                <Link to="/form-produto" state={{ id: produto.id }} style={{ color: 'green' }}> <Icon name='edit' /> </Link>
                                             </Button> &nbsp;
                                             <Button
                                                 inverted

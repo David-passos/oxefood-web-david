@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon, TextArea } from 'semantic-ui-react';
 import axios from "axios";
 import MenuSistema from '../../MenuSistema';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 
 export default function FormEntregador() {
+    const { state } = useLocation();
+    const [idEntregador, setIdEntregador] = useState();
+
     const [nome, setNome] = useState();
     const [cpf, setCpf] = useState();
     const [rg, setRg] = useState();
@@ -26,35 +29,63 @@ export default function FormEntregador() {
 
     const estados = [{ key: '1', text: 'Pernambuco', value: 'PE' }];
 
-    function salvar () { 
-            let EntregadorRequest = {
-        nome,
-        cpf,
-        dataNascimento,
-        foneCelular,
-        foneFixo,
-        rg,
-        qtdEntregasRealizadas,
-        valorFrete,
-        enderecoRua,
-        enderecoComplemento,
-        enderecoNumero,
-        enderecoBairro,
-        enderecoCidade,
-        enderecoCep,
-        enderecoUf,
-        ativo
+    useEffect(() => {
+        if (state != null && state.id != null) {
+            axios.get("http://localhost:8080/api/entregador/" + state.id)
+                .then((response) => {
+                    setIdEntregador(response.data.id)
+                    setNome(response.data.nome)
+                    setCpf(response.data.cpf)
+                    setRg(response.data.rg)
+                    setDataNascimento(response.data.dataNascimento)
+                    setFoneCelular(response.data.foneCelular)
+                    setFoneFixo(response.data.foneFixo)
+                    setQtdEntregasRealizadas(response.data.qtdEntregasRealizadas)
+                    setValorFrete(response.data.valorFrete)
+                    setEnderecoRua(response.data.enderecoRua)
+                    setEnderecoComplemento(response.data.enderecoComplemento)
+                    setEnderecoNumero(response.data.enderecoNumero)
+                    setEnderecoBairro(response.data.enderecoBairro)
+                    setEnderecoCep(response.data.enderecoCep)
+                    setEnderecoCidade(response.data.enderecoCidade)
+                    setEnderecoUf(response.data.enderecoUf)
+                    setAtivo(response.data.ativo)                    
+                })
         }
+    }, [state])
 
-        axios.post("http://localhost:8080/api/entregador", EntregadorRequest)
-		.then((response) => {
-		     console.log('Cliente cadastrado com sucesso.')
-		})
-		.catch((error) => {
-		     console.log('Erro ao incluir o um cliente.')
-		})
+    function salvar() {
 
-    };
+        let entregadorRequest = {
+            nome: nome,
+            cpf: cpf,
+            rg:rg,
+            dataNascimento: dataNascimento,
+            foneCelular: foneCelular,
+            foneFixo: foneFixo
+        }
+ 
+        if (idEntregador != null) { //Alteração:
+            axios.put("http://localhost:8080/api/entregador/" + idEntregador, entregadorRequest)
+            .then((response) => { console.log('Entregador alterado com sucesso.') })
+            .catch((error) => { console.log('Erro ao alter um entregador.') })
+        } else { //Cadastro:
+            axios.post("http://localhost:8080/api/entregador", entregadorRequest)
+            .then((response) => { console.log('Entregador cadastrado com sucesso.') })
+            .catch((error) => { console.log('Erro ao incluir o entregador.') })
+        }
+ }
+
+ function formatarData(dataParam) {
+
+    if (dataParam === null || dataParam === '' || dataParam === undefined) {
+        return ''
+    }
+
+    let arrayData = dataParam.split('-');
+    return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
+}
+ 
     return (
 
         <div>
@@ -64,7 +95,12 @@ export default function FormEntregador() {
 
                 <Container textAlign='justified' >
 
-                    <h2> <span style={{ color: 'darkgray' }}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro </h2>
+                { idEntregador === undefined &&
+    <h2> <span style={{color: 'darkgray'}}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
+}
+{ idEntregador != undefined &&
+    <h2> <span style={{color: 'darkgray'}}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
+}
 
                     <Divider />
 
@@ -128,7 +164,7 @@ export default function FormEntregador() {
                                         mask="99/99/9999"
                                         maskChar={null}
                                         placeholder="Ex: 20/03/1985"
-                                        value={dataNascimento}
+                                        value={formatarData(dataNascimento)}
                                         onChange={(e) => setDataNascimento(e.target.value)}
                                     />
                                 </Form.Input>
@@ -275,7 +311,7 @@ export default function FormEntregador() {
                             >
                                 <Icon name='reply' />
                                 <Link to={'/list-entregador'}>Voltar</Link>
-                                
+
                             </Button>
 
                             <Button
