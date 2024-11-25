@@ -62,7 +62,18 @@ export default function FormEntregador() {
             rg:rg,
             dataNascimento: dataNascimento,
             foneCelular: foneCelular,
-            foneFixo: foneFixo
+            foneFixo: foneFixo,
+            qtdEntregasRealizadas: qtdEntregasRealizadas,
+            valorFrete:valorFrete,
+            enderecoRua: enderecoRua,
+            enderecoComplemento: enderecoComplemento,
+            enderecoNumero: enderecoNumero,
+            enderecoBairro: enderecoBairro,
+            enderecoCep: enderecoCep,
+            enderecoCidade: enderecoCidade,
+            enderecoUf: enderecoUf,
+            ativo:ativo
+
         }
  
         if (idEntregador != null) { //Alteração:
