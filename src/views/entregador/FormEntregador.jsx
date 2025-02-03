@@ -4,7 +4,7 @@ import { Button, Container, Divider, Form, Icon, TextArea } from 'semantic-ui-re
 import axios from "axios";
 import MenuSistema from '../../MenuSistema';
 import { Link, useLocation } from "react-router-dom";
-
+import { notifyError, notifySuccess } from '../../views/util/util';
 
 export default function FormEntregador() {
     const { state } = useLocation();
@@ -49,7 +49,7 @@ export default function FormEntregador() {
                     setEnderecoCep(response.data.enderecoCep)
                     setEnderecoCidade(response.data.enderecoCidade)
                     setEnderecoUf(response.data.enderecoUf)
-                    setAtivo(response.data.ativo)                    
+                    setAtivo(response.data.ativo)
                 })
         }
     }, [state])
@@ -59,12 +59,12 @@ export default function FormEntregador() {
         let entregadorRequest = {
             nome: nome,
             cpf: cpf,
-            rg:rg,
+            rg: rg,
             dataNascimento: dataNascimento,
             foneCelular: foneCelular,
             foneFixo: foneFixo,
             qtdEntregasRealizadas: qtdEntregasRealizadas,
-            valorFrete:valorFrete,
+            valorFrete: valorFrete,
             enderecoRua: enderecoRua,
             enderecoComplemento: enderecoComplemento,
             enderecoNumero: enderecoNumero,
@@ -72,31 +72,52 @@ export default function FormEntregador() {
             enderecoCep: enderecoCep,
             enderecoCidade: enderecoCidade,
             enderecoUf: enderecoUf,
-            ativo:ativo
+            ativo: ativo
 
         }
- 
+
         if (idEntregador != null) { //Alteração:
             axios.put("http://localhost:8080/api/entregador/" + idEntregador, entregadorRequest)
-            .then((response) => { console.log('Entregador alterado com sucesso.') })
-            .catch((error) => { console.log('Erro ao alter um entregador.') })
+                .then((response) => {
+                    notifySuccess('entregador alterado com sucesso.')
+
+                })
+                .catch((error) => {
+                    if (error.response.data.errors != undefined) {
+                        for (let i = 0; i < error.response.data.errors.length; i++) {
+                            notifyError(error.response.data.errors[i].defaultMessage)
+                        }
+                    } else {
+                        notifyError(error.response.data.message)
+                    }
+
+                })
         } else { //Cadastro:
             axios.post("http://localhost:8080/api/entregador", entregadorRequest)
-            .then((response) => { console.log('Entregador cadastrado com sucesso.') })
-            .catch((error) => { console.log('Erro ao incluir o entregador.') })
+                .then((response) => {  notifySuccess('entregador alterado com sucesso.') 
+
+                })
+                .catch((error) => { if (error.response.data.errors != undefined) {
+                    for (let i = 0; i < error.response.data.errors.length; i++) {
+                        notifyError(error.response.data.errors[i].defaultMessage)
+                    }
+                } else {
+                    notifyError(error.response.data.message)
+                }
+                 })
         }
- }
-
- function formatarData(dataParam) {
-
-    if (dataParam === null || dataParam === '' || dataParam === undefined) {
-        return ''
     }
 
-    let arrayData = dataParam.split('-');
-    return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
-}
- 
+    function formatarData(dataParam) {
+
+        if (dataParam === null || dataParam === '' || dataParam === undefined) {
+            return ''
+        }
+
+        let arrayData = dataParam.split('-');
+        return arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
+    }
+
     return (
 
         <div>
@@ -106,12 +127,12 @@ export default function FormEntregador() {
 
                 <Container textAlign='justified' >
 
-                { idEntregador === undefined &&
-    <h2> <span style={{color: 'darkgray'}}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
-}
-{ idEntregador != undefined &&
-    <h2> <span style={{color: 'darkgray'}}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
-}
+                    {idEntregador === undefined &&
+                        <h2> <span style={{ color: 'darkgray' }}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
+                    }
+                    {idEntregador != undefined &&
+                        <h2> <span style={{ color: 'darkgray' }}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
+                    }
 
                     <Divider />
 
