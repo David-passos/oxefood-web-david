@@ -9,6 +9,11 @@ export default function ListProduto() {
     const [openModal, setOpenModal] = useState(false);
     const [idRemover, setIdRemover] = useState();
     const [lista, setLista] = useState([]);
+    const [menuFiltro, setMenuFiltro] = useState();
+const [codigo, setCodigo] = useState();
+const [titulo, setTitulo] = useState();
+const [idCategoria, setIdCategoria] = useState();
+const [listaCategoriaProduto, setListaCategoriaProduto] = useState([]);
 
     function confirmaRemover(id) {
         setOpenModal(true)
@@ -26,6 +31,19 @@ export default function ListProduto() {
             .then((response) => {
                 setLista(response.data)
             })
+            axios.get("http://localhost:8080/api/categoriaproduto")
+            .then((response) => {
+     
+                const dropDownCategorias = [];
+                dropDownCategorias.push({ text: '', value: '' });
+                response.data.map(c => (
+                    dropDownCategorias.push({ text: c.descricao, value: c.id })
+                ))
+     
+                setListaCategoriaProduto(dropDownCategorias)
+             
+            })
+     
     }
     function formatarData(dataParam) {
 
